@@ -52,3 +52,21 @@ def get_book(book_id):
     if not book:
         return jsonify({"error": "Book not found"}), 404
     return jsonify({"id": book.id, "title": book.title, "author": book.author, "year": book.year})
+
+# Update a book by ID
+@app.route('/books/<int:book_id>', methods=['PUT'])
+def update_book(book_id):
+    book = Book.query.get(book_id)
+    if not book:
+        return jsonify({"error": "Book not found"}), 404
+    data = request.json
+    book.title = data.get("title", book.title)
+    book.author = data.get("author", book.author)
+    book.year = data.get("year", book.year)
+    db.session.commit()
+    return jsonify({"message": "Book updated!", "book": {
+        "id": book.id,
+        "title": book.title,
+        "author": book.author,
+        "year": book.year
+    }})
