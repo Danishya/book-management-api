@@ -21,3 +21,19 @@ with app.app_context():
 @app.route('/')
 def home():
     return jsonify({"message": "Welcome to Book Management REST API!"})
+
+#Add new book
+@app.route('/books', methods=['POST'])
+def add_book():
+    data = request.json
+    if not data.get('title') or not data.get('author') or not data.get('year'):
+        return jsonify({"error": "Title, author, and year are required"}), 400
+    new_book = Book(title=data['title'], author=data['author'], year=data['year'])
+    db.session.add(new_book)
+    db.session.commit()
+    return jsonify({"message": "Book added!", "book": {
+        "id": new_book.id,
+        "title": new_book.title,
+        "author": new_book.author,
+        "year": new_book.year
+    }}), 201
