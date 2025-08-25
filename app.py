@@ -16,3 +16,8 @@ class Book(db.Model):
 with app.app_context():
     db.create_all()
 
+
+#home route
+@app.route('/')
+def home():
+    return jsonify({"message": "Welcome to Book Management REST API!"})
