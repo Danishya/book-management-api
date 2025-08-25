@@ -81,3 +81,5 @@ def delete_book(book_id):
     db.session.commit()
     return jsonify({"message": "Book deleted!"})
 
+if __name__ == '__main__':
+    app.run(debug=True)
