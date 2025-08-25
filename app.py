@@ -37,3 +37,18 @@ def add_book():
         "author": new_book.author,
         "year": new_book.year
     }}), 201
+
+# Get all books
+@app.route('/books', methods=['GET'])
+def get_books():
+    books = Book.query.all()
+    result = [{"id": b.id, "title": b.title, "author": b.author, "year": b.year} for b in books]
+    return jsonify(result)
+
+# Get a single book by ID
+@app.route('/books/<int:book_id>', methods=['GET'])
+def get_book(book_id):
+    book = Book.query.get(book_id)
+    if not book:
+        return jsonify({"error": "Book not found"}), 404
+    return jsonify({"id": book.id, "title": book.title, "author": book.author, "year": book.year})
